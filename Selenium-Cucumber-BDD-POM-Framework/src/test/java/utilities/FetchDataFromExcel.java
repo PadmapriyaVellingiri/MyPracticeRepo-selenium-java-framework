@@ -123,9 +123,28 @@ public class FetchDataFromExcel {
             XSSFRow header = sheet.getRow(0);
             XSSFRow row = sheet.getRow(1);
 
-            for (int i = 0; i < header.getLastCellNum(); i++) {
+/*            for (int i = 0; i < header.getLastCellNum(); i++) {
                 String key = header.getCell(i).toString();
                 String value = row.getCell(i).toString();
+                accountData.put(key, value);
+            }
+            
+*/
+            
+            DataFormatter formatter = new DataFormatter();
+
+            for (int i = 0; i < header.getLastCellNum(); i++) {
+
+                String key = formatter.formatCellValue(header.getCell(i));
+
+                XSSFCell cell = row.getCell(i);
+
+                String value = "";
+
+                if (cell != null) {
+                    value = formatter.formatCellValue(cell);
+                }
+
                 accountData.put(key, value);
             }
 
@@ -141,6 +160,7 @@ public class FetchDataFromExcel {
     
    public static void writeAccountID(String accountID) {
 	   try {
+		   
            FileInputStream fis = new FileInputStream(ConstantsData.EXCEL_PATH);
            XSSFWorkbook workbook = new XSSFWorkbook(fis);
            XSSFSheet sheet = workbook.getSheet("AccountID");
